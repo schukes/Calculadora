@@ -4,247 +4,239 @@
   <title>Calculadora</title>
   <style>
     body {
-      background-color: #212121;
-      color: #ffffff;
       font-family: Arial, sans-serif;
-      padding: 10px;
-      margin: 0;
-    }
-
-    h1 {
-      text-align: center;
+      background-color: #222;
+      color: #fff;
     }
 
     .calculator {
-      max-width: 400px;
+      max-width: 300px;
       margin: 0 auto;
-      background-color: #333333;
-      border-radius: 10px;
-      padding: 20px;
+      background-color: #333;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
     }
 
-    #resultado {
+    #input {
       width: 100%;
-      height: 40px;
-      font-size: 24px;
       padding: 5px;
       margin-bottom: 10px;
-      background-color: #555555;
+      font-size: 18px;
+      background-color: #444;
+      color: #fff;
       border: none;
-      color: #ffffff;
-      text-align: right;
+      border-radius: 5px;
     }
 
-    .button-grid {
+    .buttons {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      grid-gap: 10px;
+      grid-gap: 5px;
     }
 
     button {
-      width: 100%;
-      height: 40px;
+      padding: 10px;
       font-size: 18px;
-      background-color: #666666;
+      background-color: #555;
+      color: #fff;
       border: none;
-      color: #ffffff;
       cursor: pointer;
     }
 
-    button:hover {
-      background-color: #999999;
+    .tooltip {
+      position: relative;
+      display: inline-block;
     }
 
-    #historico {
-      margin-top: 20px;
-      background-color: #212121;
+    .tooltip:hover #tooltipText {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .tooltip #tooltipText {
+      visibility: hidden;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .print-button {
+      display: block;
+      margin: 10px auto;
       padding: 10px;
-      border-radius: 10px;
+      font-size: 16px;
+      background-color: #555;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
 
     .ticket {
-      background-color: #333333;
       padding: 10px;
-      margin-bottom: 10px;
+      margin-top: 10px;
+      background-color: #444;
+      border: 1px solid #777;
       border-radius: 5px;
     }
 
     .ticket p {
       margin: 0;
-      font-size: 16px;
-    }
-
-    .ticket .expressao {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .ticket .resultado {
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    .ticket hr {
-      border: none;
-      border-top: 1px dashed #ffffff;
-      margin: 10px 0;
-    }
-
-    .btn-limpar {
-      width: 100%;
-      height: 40px;
-      font-size: 18px;
-      background-color: #bf360c;
-      border: none;
-      color: #ffffff;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    @media (max-width: 480px) {
-      .calculator {
-        max-width: 300px;
-      }
+      white-space: pre;
     }
   </style>
 </head>
 <body>
-  <h1>Calculadora</h1>
   <div class="calculator">
-    <input type="text" id="resultado" readonly>
-    <div class="button-grid">
-      <button onclick="adicionarNumero('7')">7</button>
-      <button onclick="adicionarNumero('8')">8</button>
-      <button onclick="adicionarNumero('9')">9</button>
-      <button onclick="adicionarOperador('+')">+</button>
-      <button onclick="adicionarNumero('4')">4</button>
-      <button onclick="adicionarNumero('5')">5</button>
-      <button onclick="adicionarNumero('6')">6</button>
-      <button onclick="adicionarOperador('-')">-</button>
-      <button onclick="adicionarNumero('1')">1</button>
-      <button onclick="adicionarNumero('2')">2</button>
-      <button onclick="adicionarNumero('3')">3</button>
-      <button onclick="adicionarOperador('*')">*</button>
-      <button onclick="adicionarNumero('0')">0</button>
-      <button onclick="adicionarDecimal('.')">.</button>
-      <button onclick="calcular()">=</button>
-      <button onclick="adicionarOperador('/')">/</button>
+    <input type="text" id="input" disabled>
+    <div class="buttons">
+      <button onclick="appendNumber(7)" data-tooltip="Insere o número 7">7</button>
+      <button onclick="appendNumber(8)" data-tooltip="Insere o número 8">8</button>
+      <button onclick="appendNumber(9)" data-tooltip="Insere o número 9">9</button>
+      <button onclick="appendOperator('+')" data-tooltip="Adição">+</button>
+      <button onclick="appendNumber(4)" data-tooltip="Insere o número 4">4</button>
+      <button onclick="appendNumber(5)" data-tooltip="Insere o número 5">5</button>
+      <button onclick="appendNumber(6)" data-tooltip="Insere o número 6">6</button>
+      <button onclick="appendOperator('-')" data-tooltip="Subtração">-</button>
+      <button onclick="appendNumber(1)" data-tooltip="Insere o número 1">1</button>
+      <button onclick="appendNumber(2)" data-tooltip="Insere o número 2">2</button>
+      <button onclick="appendNumber(3)" data-tooltip="Insere o número 3">3</button>
+      <button onclick="appendOperator('*')" data-tooltip="Multiplicação">*</button>
+      <button onclick="appendNumber(0)" data-tooltip="Insere o número 0">0</button>
+      <button onclick="appendOperator('.')">.</button>
+      <button onclick="calculate()" data-tooltip="Calcula o resultado">=</button>
+      <button onclick="appendOperator('/')" data-tooltip="Divisão">/</button>
+      <button onclick="clearInput()" data-tooltip="Limpa o campo">C</button>
+      <button onclick="memoryClear()" data-tooltip="Limpa a memória">MC</button>
+      <button onclick="memoryRecall()" data-tooltip="Recupera o valor armazenado na memória e insere no campo de entrada">MR</button>
+      <button onclick="memoryAdd()" data-tooltip="Adiciona o valor atual no campo de entrada à memória">M+</button>
+      <button onclick="memorySubtract()" data-tooltip="Subtrai o valor atual no campo de entrada da memória">M-</button>
+      <button onclick="memoryStore()" data-tooltip="Armazena o valor atual no campo de entrada na memória">MS</button>
+      <button onclick="calculatePercentage()" data-tooltip="Calcula a porcentagem do valor atual no campo de entrada">%</button>
+      <button onclick="clearEntry()" data-tooltip="Limpa a entrada atual no campo de entrada">CE</button>
+      <button onclick="calculateInverse()" data-tooltip="Calcula o inverso do valor atual no campo de entrada">1/x</button>
+      <button onclick="calculateSquare()" data-tooltip="Calcula o quadrado do valor atual no campo de entrada">x²</button>
+      <button onclick="calculateSquareRoot()" data-tooltip="Calcula a raiz quadrada do valor atual no campo de entrada">√</button>
+      <button onclick="changeSign()" data-tooltip="Inverte o sinal do valor atual no campo de entrada">+/-</button>
     </div>
-    <button class="btn-limpar" onclick="limpar()">Limpar</button>
+    <div class="tooltip">
+      <span id="tooltipText"></span>
+    </div>
+    <button onclick="printTicket()" class="print-button">Imprimir</button>
+    <div id="ticket" class="ticket"></div>
   </div>
 
-  <div id="historico"></div>
-
   <script>
-    var numeroAtual = '';
-    var operadorAtual = '';
-    var resultado = 0;
-    var historico = [];
+    let inputField = document.getElementById("input");
+    let ticketDiv = document.getElementById("ticket");
+    let calculationHistory = [];
+    let memory = 0;
 
-    function adicionarNumero(numero) {
-      numeroAtual += numero;
-      resultado = parseFloat(numeroAtual.replace(',', '.'));
-      document.getElementById('resultado').value = numeroAtual;
+    function appendNumber(number) {
+      inputField.value += number;
     }
 
-    function adicionarOperador(operador) {
-      if (numeroAtual !== '') {
-        calcular();
-      }
-      operadorAtual = operador;
-      numeroAtual = '';
+    function appendOperator(operator) {
+      inputField.value += operator;
     }
 
-    function adicionarDecimal(decimal) {
-      if (numeroAtual === '') {
-        numeroAtual = '0';
-      }
-      if (numeroAtual.indexOf(decimal) === -1) {
-        numeroAtual += decimal;
-      }
-      document.getElementById('resultado').value = numeroAtual;
-    }
-
-    function calcular() {
-      var valorAtual = parseFloat(numeroAtual.replace(',', '.'));
-      var total;
-
-      switch (operadorAtual) {
-        case '+':
-          total = resultado + valorAtual;
-          break;
-        case '-':
-          total = resultado - valorAtual;
-          break;
-        case '*':
-          total = resultado * valorAtual;
-          break;
-        case '/':
-          total = resultado / valorAtual;
-          break;
-        default:
-          return;
-      }
-
-      historico.push({ expressao: resultado + ' ' + operadorAtual + ' ' + numeroAtual, resultado: total });
-      numeroAtual = '';
-      operadorAtual = '';
-      resultado = total;
-
-      document.getElementById('resultado').value = total;
-
-      exibirHistorico();
-    }
-
-    function limpar() {
-      numeroAtual = '';
-      operadorAtual = '';
-      resultado = 0;
-      document.getElementById('resultado').value = '';
-      historico = [];
-      exibirHistorico();
-    }
-
-    function exibirHistorico() {
-      var historicoDiv = document.getElementById('historico');
-      historicoDiv.innerHTML = '';
-
-      for (var i = 0; i < historico.length; i++) {
-        var ticket = document.createElement('div');
-        ticket.classList.add('ticket');
-
-        var expressao = document.createElement('p');
-        expressao.classList.add('expressao');
-        expressao.textContent = historico[i].expressao;
-
-        var resultado = document.createElement('p');
-        resultado.classList.add('resultado');
-        resultado.textContent = historico[i].resultado;
-
-        var linha = document.createElement('hr');
-
-        ticket.appendChild(expressao);
-        ticket.appendChild(resultado);
-        ticket.appendChild(linha);
-
-        historicoDiv.appendChild(ticket);
+    function calculate() {
+      try {
+        const expression = inputField.value;
+        result = eval(expression);
+        const operation = expression + "=" + result;
+        calculationHistory.push(operation);
+        clearInput();
+        displayCalculationHistory();
+      } catch (error) {
+        inputField.value = "Erro";
       }
     }
 
-    // Captura eventos do teclado
-    document.onkeydown = function(event) {
-      var key = event.key;
-      if (key >= '0' && key <= '9') {
-        adicionarNumero(key);
-      } else if (key === '.') {
-        adicionarDecimal(key);
-      } else if (key === '+' || key === '-' || key === '*' || key === '/') {
-        adicionarOperador(key);
-      } else if (key === 'Enter' || key === '=') {
-        calcular();
+    function clearInput() {
+      inputField.value = "";
+    }
+
+    function displayCalculationHistory() {
+      let ticketContent = "<p>Histórico de cálculos:</p>";
+      for (let i = 0; i < calculationHistory.length; i++) {
+        ticketContent += "<p>" + calculationHistory[i] + "</p>";
       }
-    };
+      ticketDiv.innerHTML = ticketContent;
+    }
+
+    function printTicket() {
+      displayCalculationHistory();
+      window.print();
+    }
+
+    // Funções adicionadas:
+
+    function memoryClear() {
+      memory = 0;
+    }
+
+    function memoryRecall() {
+      inputField.value = memory;
+    }
+
+    function memoryAdd() {
+      const currentValue = parseFloat(inputField.value);
+      memory += currentValue;
+    }
+
+    function memorySubtract() {
+      const currentValue = parseFloat(inputField.value);
+      memory -= currentValue;
+    }
+
+    function memoryStore() {
+      memory = parseFloat(inputField.value);
+    }
+
+    function calculatePercentage() {
+      const currentValue = parseFloat(inputField.value);
+      const percentage = currentValue / 100;
+      inputField.value = percentage;
+    }
+
+    function clearEntry() {
+      inputField.value = "";
+    }
+
+    function calculateInverse() {
+      const currentValue = parseFloat(inputField.value);
+      const inverse = 1 / currentValue;
+      inputField.value = inverse;
+    }
+
+    function calculateSquare() {
+      const currentValue = parseFloat(inputField.value);
+      const square = currentValue * currentValue;
+      inputField.value = square;
+    }
+
+    function calculateSquareRoot() {
+      const currentValue = parseFloat(inputField.value);
+      const squareRoot = Math.sqrt(currentValue);
+      inputField.value = squareRoot;
+    }
+
+    function changeSign() {
+      const currentValue = parseFloat(inputField.value);
+      const invertedSign = -currentValue;
+      inputField.value = invertedSign;
+    }
   </script>
 </body>
 </html>
