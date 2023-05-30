@@ -83,6 +83,8 @@
     }
 
     .ticket {
+      max-height: 200px; /* Defina a altura máxima desejada */
+      overflow-y: auto; /* Adiciona uma barra de rolagem vertical quando necessário */
       padding: 10px;
       margin-top: 10px;
       background-color: #444;
@@ -238,6 +240,27 @@
       const invertedSign = -currentValue;
       inputField.value = invertedSign;
     }
+
+    document.addEventListener('keydown', function(event) {
+      const key = event.key;
+
+      if (/[0-9]/.test(key)) {
+        // Números de 0 a 9
+        appendNumber(parseInt(key));
+      } else if (/[+\-*/.]/.test(key)) {
+        // Operadores: +, -, *, /
+        appendOperator(key);
+      } else if (key === 'Enter' || key === '=') {
+        // Tecla Enter ou igual (=) para calcular
+        calculate();
+      } else if (key === 'Delete') {
+        // Tecla Delete para limpar a entrada atual
+        clearEntry();
+      } else if (key === 'Escape') {
+        // Tecla Escape para limpar tudo
+        clearInput();
+      }
+    });
   </script>
 </body>
 </html>
