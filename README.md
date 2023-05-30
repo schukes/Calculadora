@@ -141,6 +141,7 @@
     let ticketDiv = document.getElementById("ticket");
     let calculationHistory = [];
     let memory = 0;
+    let result;
 
     function appendNumber(number) {
       inputField.value += number;
@@ -149,22 +150,22 @@
     function appendOperator(operator) {
       inputField.value += operator;
     }
+    function clearInput() {
+      inputField.value = "";
+      result = undefined;
+    }
 
     function calculate() {
       try {
-        const expression = inputField.value;
-        result = eval(expression);
-        const operation = expression + "=" + result;
-        calculationHistory.push(operation);
-        clearInput();
-        displayCalculationHistory();
-      } catch (error) {
-        inputField.value = "Erro";
-      }
-    }
-
-    function clearInput() {
-      inputField.value = "";
+       const expression = inputField.value;
+       result = eval(expression);
+       inputField.value = result; // Exibe o resultado no campo de entrada
+       const operation = expression + "=" + result;
+       calculationHistory.push(operation);
+       displayCalculationHistory();
+     } catch (error) {
+       inputField.value = "Erro";
+     }
     }
 
     function displayCalculationHistory() {
