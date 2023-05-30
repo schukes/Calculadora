@@ -144,7 +144,7 @@
 
     function adicionarNumero(numero) {
       numeroAtual += numero;
-      resultado = parseFloat(numeroAtual);
+      resultado = parseFloat(numeroAtual.replace(',', '.'));
       document.getElementById('resultado').value = numeroAtual;
     }
 
@@ -167,7 +167,7 @@
     }
 
     function calcular() {
-      var valorAtual = parseFloat(numeroAtual);
+      var valorAtual = parseFloat(numeroAtual.replace(',', '.'));
       var total;
 
       switch (operadorAtual) {
