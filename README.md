@@ -1,266 +1,47 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Calculadora</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #222;
-      color: #fff;
-    }
+# 💻 Calculadora Web Simples
 
-    .calculator {
-      max-width: 300px;
-      margin: 0 auto;
-      background-color: #333;
-      padding: 10px;
-      border-radius: 5px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    }
+Uma calculadora básica e científica desenvolvida usando HTML, CSS (com Grid) e JavaScript puro.
 
-    #input {
-      width: 100%;
-      padding: 5px;
-      margin-bottom: 10px;
-      font-size: 18px;
-      background-color: #444;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-    }
+## 🌟 Funcionalidades
 
-    .buttons {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-gap: 5px;
-    }
+Esta calculadora oferece funções aritméticas básicas, operações de memória (M+, MR, etc.) e funções científicas essenciais.
 
-    button {
-      padding: 10px;
-      font-size: 18px;
-      background-color: #555;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
+* **Operações Básicas:** Adição (+), Subtração (-), Multiplicação (*), Divisão (/).
+* **Controle:** Limpar tudo (C), Limpar Entrada (CE), Alterar Sinal (+/-).
+* **Memória:** Limpar (MC), Recuperar (MR), Adicionar (M+), Subtrair (M-), Armazenar (MS).
+* **Funções Científicas:** Raiz Quadrada (√), Quadrado (x²), Inverso (1/x), Porcentagem (%).
+* **Histórico:** Registro de operações no "Ticket" e função de impressão.
+* **Usabilidade:** Suporte completo para **entrada via teclado**.
 
-    .tooltip {
-      position: relative;
-      display: inline-block;
-    }
+## 🚀 Como Usar
 
-    .tooltip:hover #tooltipText {
-      visibility: visible;
-      opacity: 1;
-    }
+1.  **Clone o repositório:**
+    ```bash
+    git clone [LINK-DO-SEU-REPOSITORIO]
+    ```
+2.  **Abra o arquivo:** Navegue até o diretório e abra o arquivo `index.html` no seu navegador preferido.
 
-    .tooltip #tooltipText {
-      visibility: hidden;
-      background-color: #333;
-      color: #fff;
-      text-align: center;
-      border-radius: 6px;
-      padding: 5px;
-      position: absolute;
-      z-index: 1;
-      bottom: 125%;
-      left: 50%;
-      transform: translateX(-50%);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
+## ⌨️ Comandos do Teclado
 
-    .print-button {
-      display: block;
-      margin: 10px auto;
-      padding: 10px;
-      font-size: 16px;
-      background-color: #555;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+| Tecla | Ação |
+| :---: | :--- |
+| `0-9`, `.`, `+`, `-`, `*`, `/` | Inserir número ou operador |
+| `Enter` ou `=` | Calcular resultado |
+| `Delete` | Limpar a entrada atual (`CE`) |
+| `Escape` | Limpar tudo (`C`) |
 
-    .ticket {
-      max-height: 200px; /* Defina a altura máxima desejada */
-      overflow-y: auto; /* Adiciona uma barra de rolagem vertical quando necessário */
-      padding: 10px;
-      margin-top: 10px;
-      background-color: #444;
-      border: 1px solid #777;
-      border-radius: 5px;
-    }
+## ⚠️ Nota de Segurança
 
-    .ticket p {
-      margin: 0;
-      white-space: pre;
-    }
-  </style>
-</head>
-<body>
-  <div class="calculator">
-    <input type="text" id="input" disabled>
-    <div class="buttons">
-      <button onclick="appendNumber(7)" data-tooltip="Insere o número 7">7</button>
-      <button onclick="appendNumber(8)" data-tooltip="Insere o número 8">8</button>
-      <button onclick="appendNumber(9)" data-tooltip="Insere o número 9">9</button>
-      <button onclick="appendOperator('+')" data-tooltip="Adição">+</button>
-      <button onclick="appendNumber(4)" data-tooltip="Insere o número 4">4</button>
-      <button onclick="appendNumber(5)" data-tooltip="Insere o número 5">5</button>
-      <button onclick="appendNumber(6)" data-tooltip="Insere o número 6">6</button>
-      <button onclick="appendOperator('-')" data-tooltip="Subtração">-</button>
-      <button onclick="appendNumber(1)" data-tooltip="Insere o número 1">1</button>
-      <button onclick="appendNumber(2)" data-tooltip="Insere o número 2">2</button>
-      <button onclick="appendNumber(3)" data-tooltip="Insere o número 3">3</button>
-      <button onclick="appendOperator('*')" data-tooltip="Multiplicação">*</button>
-      <button onclick="appendNumber(0)" data-tooltip="Insere o número 0">0</button>
-      <button onclick="appendOperator('.')">.</button>
-      <button onclick="calculate()" data-tooltip="Calcula o resultado">=</button>
-      <button onclick="appendOperator('/')" data-tooltip="Divisão">/</button>
-      <button onclick="clearInput()" data-tooltip="Limpa o campo">C</button>
-      <button onclick="memoryClear()" data-tooltip="Limpa a memória">MC</button>
-      <button onclick="memoryRecall()" data-tooltip="Recupera o valor armazenado na memória e insere no campo de entrada">MR</button>
-      <button onclick="memoryAdd()" data-tooltip="Adiciona o valor atual no campo de entrada à memória">M+</button>
-      <button onclick="memorySubtract()" data-tooltip="Subtrai o valor atual no campo de entrada da memória">M-</button>
-      <button onclick="memoryStore()" data-tooltip="Armazena o valor atual no campo de entrada na memória">MS</button>
-      <button onclick="calculatePercentage()" data-tooltip="Calcula a porcentagem do valor atual no campo de entrada">%</button>
-      <button onclick="clearEntry()" data-tooltip="Limpa a entrada atual no campo de entrada">CE</button>
-      <button onclick="calculateInverse()" data-tooltip="Calcula o inverso do valor atual no campo de entrada">1/x</button>
-      <button onclick="calculateSquare()" data-tooltip="Calcula o quadrado do valor atual no campo de entrada">x²</button>
-      <button onclick="calculateSquareRoot()" data-tooltip="Calcula a raiz quadrada do valor atual no campo de entrada">√</button>
-      <button onclick="changeSign()" data-tooltip="Inverte o sinal do valor atual no campo de entrada">+/-</button>
-    </div>
-    <div class="tooltip">
-      <span id="tooltipText"></span>
-    </div>
-    <button onclick="printTicket()" class="print-button">Imprimir</button>
-    <div id="ticket" class="ticket"></div>
-  </div>
+O cálculo da expressão utiliza a função JavaScript nativa **`eval()`**. Embora seja eficiente para esta calculadora simples, o uso de `eval()` é geralmente desaconselhado para entradas de usuário não confiáveis devido a potenciais vulnerabilidades de segurança (injeção de código).
 
-  <script>
-    let inputField = document.getElementById("input");
-    let ticketDiv = document.getElementById("ticket");
-    let calculationHistory = [];
-    let memory = 0;
-    let result;
+* **Referência:** [MDN Web Docs - `eval()`](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/eval)
 
-    function appendNumber(number) {
-      inputField.value += number;
-    }
+## 🛠️ Tecnologias
 
-    function appendOperator(operator) {
-      inputField.value += operator;
-    }
-    function clearInput() {
-      inputField.value = "";
-      result = undefined;
-    }
+* **HTML5**
+* **CSS3** (Flexbox/Grid para Layout)
+* **JavaScript** (Puro)
 
-    function calculate() {
-      try {
-       const expression = inputField.value;
-       result = eval(expression);
-       inputField.value = result; // Exibe o resultado no campo de entrada
-       const operation = expression + "=" + result;
-       calculationHistory.push(operation);
-       displayCalculationHistory();
-     } catch (error) {
-       inputField.value = "Erro";
-     }
-    }
+## 🧑‍💻 Contribuição
 
-    function displayCalculationHistory() {
-      let ticketContent = "<p>Histórico de cálculos:</p>";
-      for (let i = 0; i < calculationHistory.length; i++) {
-        ticketContent += "<p>" + calculationHistory[i] + "</p>";
-      }
-      ticketDiv.innerHTML = ticketContent;
-    }
-
-    function printTicket() {
-      displayCalculationHistory();
-      window.print();
-    }
-
-    // Funções adicionadas:
-
-    function memoryClear() {
-      memory = 0;
-    }
-
-    function memoryRecall() {
-      inputField.value = memory;
-    }
-
-    function memoryAdd() {
-      const currentValue = parseFloat(inputField.value);
-      memory += currentValue;
-    }
-
-    function memorySubtract() {
-      const currentValue = parseFloat(inputField.value);
-      memory -= currentValue;
-    }
-
-    function memoryStore() {
-      memory = parseFloat(inputField.value);
-    }
-
-    function calculatePercentage() {
-      const currentValue = parseFloat(inputField.value);
-      const percentage = currentValue / 100;
-      inputField.value = percentage;
-    }
-
-    function clearEntry() {
-      inputField.value = "";
-    }
-
-    function calculateInverse() {
-      const currentValue = parseFloat(inputField.value);
-      const inverse = 1 / currentValue;
-      inputField.value = inverse;
-    }
-
-    function calculateSquare() {
-      const currentValue = parseFloat(inputField.value);
-      const square = currentValue * currentValue;
-      inputField.value = square;
-    }
-
-    function calculateSquareRoot() {
-      const currentValue = parseFloat(inputField.value);
-      const squareRoot = Math.sqrt(currentValue);
-      inputField.value = squareRoot;
-    }
-
-    function changeSign() {
-      const currentValue = parseFloat(inputField.value);
-      const invertedSign = -currentValue;
-      inputField.value = invertedSign;
-    }
-
-    document.addEventListener('keydown', function(event) {
-      const key = event.key;
-
-      if (/[0-9]/.test(key)) {
-        // Números de 0 a 9
-        appendNumber(parseInt(key));
-      } else if (/[+\-*/.]/.test(key)) {
-        // Operadores: +, -, *, /
-        appendOperator(key);
-      } else if (key === 'Enter' || key === '=') {
-        // Tecla Enter ou igual (=) para calcular
-        calculate();
-      } else if (key === 'Delete') {
-        // Tecla Delete para limpar a entrada atual
-        clearEntry();
-      } else if (key === 'Escape') {
-        // Tecla Escape para limpar tudo
-        clearInput();
-      }
-    });
-  </script>
-</body>
-</html>
+Contribuições são bem-vindas! Se você encontrar um bug ou quiser adicionar um recurso, sinta-se à vontade para abrir uma *Issue* ou enviar um *Pull Request*.
